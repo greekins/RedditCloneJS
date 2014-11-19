@@ -4,6 +4,8 @@ var Link = require('./link.js');
 var Comment = require('./comment.js');
 var http = require('http');
 var io = require('socket.io');
+var path = require('path');
+
 
 var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
@@ -18,6 +20,11 @@ app.use(express.bodyParser());
 app.use(express.cookieParser());
 app.use(express.session({secret: '2234567890QWERTY'}));
 app.use(app.router);
+
+app.configure(function() {
+    app.engine('.html', require('jade').__express);
+    app.use('/bootstrap', express.static(path.join(__dirname, 'public/assets/bootstrap')));
+});
 
 
 function checkAuth(req, res, next) {
@@ -63,8 +70,13 @@ function returnIndex(res, id, array) {
 }
 
 app.get('/', function(req, res) {
-  res.type('text/plain'); 
-  res.json(entries);
+    //res.type('text/plain');
+    //res.json(entries);
+
+    res.render('index.jade', {
+        title: 'RedditCloneJS',
+        name: 'blabla'
+    });
 });
  
 app.get('/login', function (req, res) {
