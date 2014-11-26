@@ -4,8 +4,6 @@ var Link = require('./link.js');
 var Comment = require('./comment.js');
 var http = require('http');
 var io = require('socket.io');
-var path = require('path');
-
 
 var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
@@ -20,11 +18,6 @@ app.use(express.bodyParser());
 app.use(express.cookieParser());
 app.use(express.session({secret: '2234567890QWERTY'}));
 app.use(app.router);
-
-app.configure(function() {
-    app.engine('.html', require('jade').__express);
-    app.use('/bootstrap', express.static(path.join(__dirname, 'public/assets/bootstrap')));
-});
 
 
 function checkAuth(req, res, next) {
@@ -41,9 +34,13 @@ var comments = [];
 
 //sample data
 entries.push(new Link(entries.length, "Title", "Author", "http://www.google.ch"));
+entries.push(new Link(entries.length, "Tanzen", "Dominic", "http://www.test.ch"));
 var comment = new Comment(0, "TestComment", "Author");
+var comment2 = new Comment(0, "Blabla", "Marco");
 comments.push(comment);
+comments.push(comment2);
 entries[0].comments.push(comment);
+entries[1].comments.push(comment2);
 
 //default user
 users.push(new User(users.length, "a", "a") );
@@ -70,13 +67,9 @@ function returnIndex(res, id, array) {
 }
 
 app.get('/', function(req, res) {
-    //res.type('text/plain');
-    //res.json(entries);
-
-    res.render('index.jade', {
-        title: 'RedditCloneJS',
-        name: 'blabla'
-    });
+  //res.type('text/plain');
+  //res.json(entries);
+    res.sendfile('public/view/index.html');
 });
  
 app.get('/login', function (req, res) {
