@@ -1,0 +1,69 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>RedditClone JS</title>
+
+    <link rel="stylesheet" href="Libs/bootstrap/css/bootstrap.min.css" type="text/css">
+    <script language="javascript" src="Libs/handlebars/handlebars-v2.0.0.js"></script>
+    <script language="javascript" src="Libs/jquery-2.0.3.js"></script>
+
+    <!--Scripts-->
+</head>
+
+<!--Menu-->
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Home</a>
+        </div>
+        <center>
+            <div class="navbar-collapse collapse" id="navbar-main">
+                <form class="navbar-form navbar-right" role="search">
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="username" placeholder="Username">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" name="password" placeholder="Password">
+                    </div>
+                    <button type="submit" class="btn btn-default">Sign In</button>
+                    <button type="button" class="btn btn-primary">Sign Up</button>
+                </form>
+            </div>
+        </center>
+    </div>
+</div>
+<script id='entries' type='text/x-handlebars-template'>
+    <h2>Entries</h2>
+    {{#each .}}
+    <li> Entry {{ title }}  {{ author }}</li>
+    {{/each}}
+</script>
+<script language="javascript">
+    (function($) { $(function() {
+        var entriesText = $('#entries').html();
+        var entryTemplate = Handlebars.compile (entriesText);
+        var getAndRenderData = function () {
+            $.ajax({
+                type: "GET",
+                url: "/entries",
+                dataType: "json",
+                success: function( response ) {
+                    var filledTemplate = entryTemplate(response)
+                    $(document.body).append (filledTemplate);
+                }
+            });
+        }
+        $( document ).ready(function() {
+            getAndRenderData();
+        });
+    });
+    })(jQuery);
+</script>
+</body>
+</html>
