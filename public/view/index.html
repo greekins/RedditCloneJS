@@ -1,69 +1,154 @@
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <title>RedditClone JS</title>
+    <head>
+        <title>RedditClone JS</title>
 
-    <link rel="stylesheet" href="Libs/bootstrap/css/bootstrap.min.css" type="text/css">
-    <script language="javascript" src="Libs/handlebars/handlebars-v2.0.0.js"></script>
-    <script language="javascript" src="Libs/jquery-2.0.3.js"></script>
+        <link rel="stylesheet" href="Libs/bootstrap/css/bootstrap.min.css" type="text/css">
+        <link rel="stylesheet" href="style.css" type="text/css">
+        <script language="javascript" src="Libs/handlebars/handlebars-v2.0.0.js"></script>
+        <script language="javascript" src="Libs/jquery-2.0.3.js"></script>
 
-    <!--Scripts-->
-</head>
+        <!--Scripts-->
+    </head>
+    <body>
 
-<!--Menu-->
-<div class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">Home</a>
-        </div>
-        <center>
-            <div class="navbar-collapse collapse" id="navbar-main">
-                <form class="navbar-form navbar-right" role="search">
-                    <div class="form-group">
-                        <input type="text" class="form-control" name="username" placeholder="Username">
+    <!--Menu-->
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/">Home</a>
+                </div>
+                <center>
+                    <div class="navbar-collapse collapse" id="navbar-main">
+                        <form class="navbar-form navbar-right" role="search">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="username" placeholder="Username" id="userName">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control" name="password" placeholder="Password" id="userPassword">
+                            </div>
+                            <button type="button" id="login" class="btn btn-success">Sign In</button>
+                            <button type="button" class="btn btn-primary">Sign Up</button>
+                            <div class ="form-group" id="usernameText">Hello: </div>
+                        </form>
                     </div>
-                    <div class="form-group">
-                        <input type="password" class="form-control" name="password" placeholder="Password">
-                    </div>
-                    <button type="submit" class="btn btn-default">Sign In</button>
-                    <button type="button" class="btn btn-primary">Sign Up</button>
-                </form>
+                </center>
             </div>
-        </center>
-    </div>
-</div>
-<script id='entries' type='text/x-handlebars-template'>
-    <h2>Entries</h2>
-    {{#each .}}
-    <li> Entry {{ title }}  {{ author }}</li>
-    {{/each}}
-</script>
-<script language="javascript">
-    (function($) { $(function() {
-        var entriesText = $('#entries').html();
-        var entryTemplate = Handlebars.compile (entriesText);
-        var getAndRenderData = function () {
-            $.ajax({
-                type: "GET",
-                url: "/entries",
-                dataType: "json",
-                success: function( response ) {
-                    var filledTemplate = entryTemplate(response)
-                    $(document.body).append (filledTemplate);
-                }
-            });
-        }
-        $( document ).ready(function() {
-            getAndRenderData();
-        });
-    });
-    })(jQuery);
-</script>
-</body>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                            <div class="jumbotron">
+                                <h1>Add a new Post</h1>
+                                <form class="form-horizontal">
+                                    <div class="form-group">
+                                        <label for="newPostTitle" class="control-label col-xs-1">Title:</label>
+                                        <div class="col-xs-10">
+                                            <input type="text" class="form-control" id="newPostTitle" placeholder="Title">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="newPostLink" class="control-label col-xs-1">Link:</label>
+                                        <div class="col-xs-10">
+                                            <input type="url" class="form-control" id="newPostLink" placeholder="http://www.example.com">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-xs-offset-7 col-xs-10">
+                                            <button type="button" id="postEntry" class="btn btn-primary">Submit</button>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
+                    <h2>Entries</h2>
+                    <div>
+                        <ul class="media-list list-group" id="entries">
+
+                        </ul>
+                    </div>
+                </div>
+                <script id='entriesTemplate' type='text/x-handlebars-template'>
+                    {{#each .}}
+
+                        <li class="media list-group-item">Title: {{ title }} <br> Link: {{ url }} <br> Author: {{ author }}</li>
+
+                    {{/each}}
+                </script>
+                <script id="loginNameTemplate" type="'text/x-handlebars-template">
+                    {{ . }}
+                </script>
+                <script language="javascript">
+                    (function($) { $(function() {
+                        $( document ).ready(function() {
+                            getAndRenderData();
+                            username();
+                            $("#postEntry").click(function () {
+                                postLink();
+                            });
+                            $("#login").click(function () {
+                                login();
+                            });
+                        });
+                        var source = $('#entriesTemplate').html();
+                        var entriesTemplate = Handlebars.compile(source);
+                        var placeholder = $("#entries");
+                        var getAndRenderData = function () {
+                            $.ajax({
+                                type: "GET",
+                                url: "/entries",
+                                dataType: "json",
+                                success: function( response ) {
+                                    var html = entriesTemplate(response);
+                                    placeholder.append(html);
+                                }
+                            });
+                        }
+                    });
+                        var postLink = function() {
+                            var title = $("#newPostTitle").val();
+                            var link = $("#newPostLink").val();
+                            var json = { title: title, url: link };
+                            $.post("/entry",
+                                    json,
+                                    function() {
+                                        location.reload(true);
+                                    }
+                            );
+                        }
+                        var login = function() {
+                            var username = $("#userName").val();
+                            var password = $("#userPassword").val();
+                            var json = { name: username, password: password };
+                            $.post("/login",
+                                    json,
+                                    function() {
+                                        location.reload(true);
+                                    }
+                            );
+                        }
+                        var username = function() {
+                            var source = $('#loginNameTemplate').html();
+                            var loginTemplate = Handlebars.compile(source);
+                            var placeholder = $("#usernameText");
+                            $.ajax({
+                                type: "GET",
+                                url: "/login",
+                                dataType: "json",
+                                success: function( response ) {
+                                    var html = loginTemplate(response);
+                                    placeholder.append(html);
+                                }
+                            });
+                        }
+                    })(jQuery);
+                </script>
+            </div>
+        </div>
+    </body>
 </html>

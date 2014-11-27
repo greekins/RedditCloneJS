@@ -44,6 +44,7 @@ entries[1].comments.push(comment2);
 
 //default user
 users.push(new User(users.length, "a", "a") );
+users.push(new User(users.length, "Marco", "test") );
   
 function findUser(name)
 {
@@ -81,12 +82,12 @@ app.get('/login', function (req, res) {
 });
  
  app.post('/login', function (req, res) {
-    var post = req.body;  
-	var user = findUser(post.name);	 
+    var post = req.body;
+	var user = findUser(post.name);
 	if( !!user && post.password == user.password)
-	{		
+	{
 		req.session.user_id = user.id;		
-		res.json(true);		
+		res.json(true);
 		return;
 	}	
 	res.json(false);
@@ -114,13 +115,14 @@ app.get('/login', function (req, res) {
 
  
  
- app.get('/entries', function (req, res) {
+app.get('/entries', function (req, res) {
     res.json(entries);
 });
 
 
 app.post('/entry', function(req, res) {
-    var newLink = new Link(entries.length, req.body.title, users[req.session.user_id].name, req.body.url);	
+    var newLink = new Link(entries.length, req.body.title, users[req.session.user_id].name, req.body.url);
+    console.log(newLink);
  	entries.push(newLink);
  	res.json(newLink);
  	io.sockets.emit('message', { action: "AddLink" });

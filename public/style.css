@@ -1,0 +1,21 @@
+﻿.jumbotron {
+    padding-bottom: 10px;
+}
+
+.jumbotron h1 {
+    font-size: 43px;
+}
+.form-horizontal .control-label {
+    text-align: left;
+    font-weight: normal;
+    line-height: 34px;
+    padding-top: 0;
+}
+.form-horizontal .form-control {
+    width: 70%;
+}
+.navbar-form .form-group {
+    color: white;
+}
+
+
