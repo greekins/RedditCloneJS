@@ -27,13 +27,14 @@
                     <div class="navbar-collapse collapse" id="navbar-main">
                         <form class="navbar-form navbar-right" role="search">
                             <div class="form-group">
-                                <input type="text" class="form-control" name="username" placeholder="Username">
+                                <input type="text" class="form-control" name="username" placeholder="Username" id="userName">
                             </div>
                             <div class="form-group">
-                                <input type="password" class="form-control" name="password" placeholder="Password">
+                                <input type="password" class="form-control" name="password" placeholder="Password" id="userPassword">
                             </div>
-                            <button type="submit" class="btn btn-default">Sign In</button>
+                            <button type="button" id="login" class="btn btn-success">Sign In</button>
                             <button type="button" class="btn btn-primary">Sign Up</button>
+                            <div class ="form-group" id="usernameText">Hello: </div>
                         </form>
                     </div>
                 </center>
@@ -59,7 +60,7 @@
                                     </div>
                                     <div class="form-group">
                                         <div class="col-xs-offset-7 col-xs-10">
-                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                            <button type="button" id="postEntry" class="btn btn-primary">Submit</button>
                                         </div>
                                     </div>
                                 </form>
@@ -75,12 +76,25 @@
                 <script id='entriesTemplate' type='text/x-handlebars-template'>
                     {{#each .}}
 
-                        <li class="media list-group-item">{{ title }}  {{ author }}</li>
+                        <li class="media list-group-item">Title: {{ title }} <br> Link: {{ url }} <br> Author: {{ author }}</li>
 
                     {{/each}}
                 </script>
+                <script id="loginNameTemplate" type="'text/x-handlebars-template">
+                    {{ . }}
+                </script>
                 <script language="javascript">
                     (function($) { $(function() {
+                        $( document ).ready(function() {
+                            getAndRenderData();
+                            username();
+                            $("#postEntry").click(function () {
+                                postLink();
+                            });
+                            $("#login").click(function () {
+                                login();
+                            });
+                        });
                         var source = $('#entriesTemplate').html();
                         var entriesTemplate = Handlebars.compile(source);
                         var placeholder = $("#entries");
@@ -95,10 +109,46 @@
                                 }
                             });
                         }
-                        $( document ).ready(function() {
-                            getAndRenderData();
-                        });
                     });
+                        var postLink = function() {
+                            var title = $("#newPostTitle").val();
+                            var link = $("#newPostLink").val();
+                            var json = { title: title, url: link };
+                            console.log(json);
+                            $.post("/entry",
+                                    json,
+                                    function() {
+                                        location.reload(true);
+                                    }
+                            );
+                        }
+                        var login = function() {
+                            var username = $("#userName").val();
+                            var password = $("#userPassword").val();
+                            var json = { name: username, password: password };
+                            console.log(json);
+                            $.post("/login",
+                                    json,
+                                    function() {
+                                        location.reload(true);
+                                    }
+                            );
+                        }
+                        var username = function() {
+                            var source = $('#loginNameTemplate').html();
+                            var loginTemplate = Handlebars.compile(source);
+                            var placeholder = $("#usernameText");
+                            $.ajax({
+                                type: "GET",
+                                url: "/login",
+                                dataType: "json",
+                                success: function( response ) {
+                                    var html = loginTemplate(response);
+                                    console.log(response);
+                                    placeholder.append(html);
+                                }
+                            });
+                        }
                     })(jQuery);
                 </script>
             </div>
