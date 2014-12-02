@@ -26,15 +26,18 @@
                 <center>
                     <div class="navbar-collapse collapse" id="navbar-main">
                         <form class="navbar-form navbar-right" role="search">
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="username" placeholder="Username" id="userName">
+                            <div class ="form-group" id="usernameText" style="display:none">Hello: </div>
+                            <div id="login-form" style="display:none">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="username" placeholder="Username" id="userName">
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" class="form-control" name="password" placeholder="Password" id="userPassword">
+                                </div>
+                                <button type="button" id="login" class="btn btn-success">Sign In</button>
+                                <button type="button" id="register" class="btn btn-primary">Sign Up</button>
                             </div>
-                            <div class="form-group">
-                                <input type="password" class="form-control" name="password" placeholder="Password" id="userPassword">
-                            </div>
-                            <button type="button" id="login" class="btn btn-success">Sign In</button>
-                            <button type="button" class="btn btn-primary">Sign Up</button>
-                            <div class ="form-group" id="usernameText">Hello: </div>
+                            <button type="button" id="logout" class="btn btn-primary" style="display:none">Sign Out</button>
                         </form>
                     </div>
                 </center>
@@ -43,34 +46,63 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-12">
-                            <div class="jumbotron">
-                                <h1>Add a new Post</h1>
-                                <form class="form-horizontal">
-                                    <div class="form-group">
-                                        <label for="newPostTitle" class="control-label col-xs-1">Title:</label>
-                                        <div class="col-xs-10">
-                                            <input type="text" class="form-control" id="newPostTitle" placeholder="Title">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="newPostLink" class="control-label col-xs-1">Link:</label>
-                                        <div class="col-xs-10">
-                                            <input type="url" class="form-control" id="newPostLink" placeholder="http://www.example.com">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="col-xs-offset-7 col-xs-10">
-                                            <button type="button" id="postEntry" class="btn btn-primary">Submit</button>
-                                        </div>
-                                    </div>
-                                </form>
-
+                    <div id="registration" class="jumbotron" style="display:none">
+                        <h1>Create a new Account</h1>
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label for="newPostTitle" class="control-label col-xs-2">Username:</label>
+                                <div class="col-xs-10">
+                                    <input type="text" class="form-control" id="registerUsername">
+                                </div>
                             </div>
-                    <h2>Entries</h2>
-                    <div>
-                        <ul class="media-list list-group" id="entries">
+                            <div class="form-group">
+                                <label for="newPostLink" class="control-label col-xs-2">Password:</label>
+                                <div class="col-xs-10">
+                                    <input type="password" class="form-control" id="registerPassword">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="newPostLink" class="control-label col-xs-2">Confirm Password:</label>
+                                <div class="col-xs-10">
+                                    <input type="password" class="form-control" id="registerPasswordConfirmation">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-offset-7 col-xs-10">
+                                    <button type="button" id="addUser" class="btn btn-primary">Register</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div id="addPost" class="jumbotron" style="display:none">
+                        <h1>Add a new Post</h1>
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label for="newPostTitle" class="control-label col-xs-1">Title:</label>
+                                <div class="col-xs-10">
+                                    <input type="text" class="form-control" id="newPostTitle" placeholder="Title">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="newPostLink" class="control-label col-xs-1">Link:</label>
+                                <div class="col-xs-10">
+                                    <input type="url" class="form-control" id="newPostLink" placeholder="http://www.example.com">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-offset-7 col-xs-10">
+                                    <button type="button" id="postEntry" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="jumbotron">
+                        <h2>Entries</h2>
+                        <div>
+                            <ul class="media-list list-group" id="entries">
 
-                        </ul>
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 <script id='entriesTemplate' type='text/x-handlebars-template'>
@@ -86,6 +118,7 @@
                 <script language="javascript">
                     (function($) { $(function() {
                         $( document ).ready(function() {
+                            updateHiddenElements();
                             getAndRenderData();
                             username();
                             $("#postEntry").click(function () {
@@ -93,6 +126,15 @@
                             });
                             $("#login").click(function () {
                                 login();
+                            });
+                            $("#register").click(function () {
+                                register();
+                            });
+                            $("#addUser").click(function () {
+                                addUser();
+                            });
+                            $("#logout").click(function () {
+                               logout();
                             });
                         });
                         var source = $('#entriesTemplate').html();
@@ -106,6 +148,30 @@
                                 success: function( response ) {
                                     var html = entriesTemplate(response);
                                     placeholder.append(html);
+                                }
+                            });
+                        }
+
+                        var updateHiddenElements = function() {
+                            var placeholder = $("#usernameText");
+                            $.ajax({
+                                type: "GET",
+                                url: "/login",
+                                dataType: "json",
+                                success: function( response ) {
+                                    if (response === "") {
+                                        document.getElementById("login-form").style.display="inline";
+
+                                        document.getElementById("usernameText").style.display="none";
+                                        document.getElementById("logout").style.display="none";
+                                        document.getElementById("addPost").style.display="none";
+                                    } else {
+                                        document.getElementById("login-form").style.display="none";
+
+                                        document.getElementById("usernameText").style.display="inline";
+                                        document.getElementById("logout").style.display="inline";
+                                        document.getElementById("addPost").style.display="block";
+                                    }
                                 }
                             });
                         }
@@ -145,6 +211,45 @@
                                     placeholder.append(html);
                                 }
                             });
+                        }
+                        var register = function() {
+                            document.getElementById("registration").style.display="block";
+                        }
+                        var addUser = function() {
+                            var username = $("#registerUsername").val();
+                            var password = $("#registerPassword").val();
+                            var passwordConfirmation = $("#registerPasswordConfirmation").val();
+                            if (password !== passwordConfirmation) {
+                                alert("The entered passwords don't match.");
+                            } else {
+                                var json = { name: username, password: password};
+                                $.ajax({
+                                    type: "POST",
+                                    url: "/register",
+                                    data: json,
+                                    dataType: "json",
+                                    success: function(res) {
+                                        if (res === true) {
+                                            alert("Successfully registered.");
+                                            $.post("/login",
+                                                    json,
+                                                    function () {
+                                                        location.reload(true);
+                                                    }
+                                            );
+                                        } else {
+                                            alert("Username already exists or mistakes in form");
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                        var logout = function() {
+                            $.post("/logout",
+                                function() {
+                                    location.reload(true);
+                                }
+                            );
                         }
                     })(jQuery);
                 </script>
