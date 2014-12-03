@@ -69,14 +69,15 @@
                     <h2>Entries</h2>
                     <div>
                         <ul class="media-list list-group" id="entries">
-
+                            <br><button type="button" id="voteUp" class="btn btn-primary">VoteUp</button>
                         </ul>
                     </div>
                 </div>
                 <script id='entriesTemplate' type='text/x-handlebars-template'>
                     {{#each .}}
 
-                        <li class="media list-group-item">Title: {{ title }} <br> Link: {{ url }} <br> Author: {{ author }}</li>
+                        <li class="media list-group-item">Title: {{ title }} <br> Link: {{ url }} <br> Author: {{ author }} <br> Votes: {{ rating.value }}
+                        </li>
 
                     {{/each}}
                 </script>
@@ -94,6 +95,10 @@
                             $("#login").click(function () {
                                 login();
                             });
+                            $("#voteUp").click(function () {
+                                console.log("VoteUp pressedL");
+                                voteUp(0);
+                            });
                         });
                         var source = $('#entriesTemplate').html();
                         var entriesTemplate = Handlebars.compile(source);
@@ -104,6 +109,7 @@
                                 url: "/entries",
                                 dataType: "json",
                                 success: function( response ) {
+                                    console.log(response);
                                     var html = entriesTemplate(response);
                                     placeholder.append(html);
                                 }
@@ -145,6 +151,11 @@
                                     placeholder.append(html);
                                 }
                             });
+                        }
+                        var voteUp = function(id) {
+                            $.post("/entry/" + id + "/up",
+                                    function() {location.reload(true);}
+                            )
                         }
                     })(jQuery);
                 </script>
