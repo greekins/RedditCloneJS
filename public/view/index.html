@@ -7,13 +7,14 @@
         <link rel="stylesheet" href="style.css" type="text/css">
         <script language="javascript" src="Libs/handlebars/handlebars-v2.0.0.js"></script>
         <script language="javascript" src="Libs/jquery-2.0.3.js"></script>
-        <script language="javascript" src="ui.js"></script>
 
-        <!--Scripts-->
+    <!--Scripts-->
+
     </head>
     <body>
 
     <!--Menu-->
+
         <div class="navbar navbar-inverse navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
@@ -44,6 +45,9 @@
                 </center>
             </div>
         </div>
+
+    <!-- Container -->
+
         <div class="container">
             <div class="row">
                 <div class="col-xs-12">
@@ -75,6 +79,9 @@
                             </div>
                         </form>
                     </div>
+
+    <!-- New Post -->
+
                     <div id="addPost" class="jumbotron" style="display:none">
                         <h1>Add a new Post</h1>
                         <form class="form-horizontal">
@@ -97,19 +104,36 @@
                             </div>
                         </form>
                     </div>
+
                     <div class="container">
                         <h2>Entries</h2>
                         <div>
                             <ul class="media-list list-group" id="entries">
-
                             </ul>
                         </div>
                     </div>
                 </div>
+
+    <!-- Templates -->
+
                 <script id='entriesTemplate' type='text/x-handlebars-template'>
                     {{#each .}}
 
-                        <li class="media list-group-item">Title: {{ title }} <br> Link: {{ url }} <br> Author: {{ author }}</li>
+                        <li class="media list-group-item">
+                            <div class="pull-left col-xs-1">
+                                <a class="pull-left" onclick="upvote( {{ id }} )">
+                                    <span class="glyphicon glyphicon-chevron-up"></span>
+                                </a>
+                                <div class="clearfix"></div>
+                                {{ rating.value }}
+                                <div class="clearfix"></div>
+                                <a class="pull-left" onclick="downvote( {{ id }} )">
+                                    <span class="glyphicon glyphicon-chevron-down"></span>
+                                </a>
+                            </div>
+                            <a href="{{ url }}" target="_blank" style="text-decoration: none; font-size: 16pt;">{{ title }}</a> <br>
+                            Submitted by {{ author }}.
+                        </li>
 
                     {{/each}}
                 </script>
@@ -117,6 +141,12 @@
                     {{ . }}
                 </script>
             </div>
+    <!-- Footer -->
+            <footer>
+                <hr>
+                <p>&copy; RedditCloneJS 2014</p>
+            </footer>
         </div>
+        <script language="javascript" src="ui.js"></script>
     </body>
 </html>

@@ -33,8 +33,8 @@ var users = [];
 var comments = [];
 
 //sample data
-entries.push(new Link(entries.length, "Title", "Author", "http://www.google.ch"));
-entries.push(new Link(entries.length, "Tanzen", "Dominic", "http://www.test.ch"));
+entries.push(new Link(entries.length, "Das ist eine sehr gute Suchmaschine", "Author", "http://www.google.ch"));
+entries.push(new Link(entries.length, "Diese Website besuche ich mindestens einmal pro Tag!", "Dominic", "http://www.test.ch"));
 var comment = new Comment(0, "TestComment", "Author");
 var comment2 = new Comment(0, "Blabla", "Marco");
 comments.push(comment);
