@@ -27,9 +27,7 @@ var getAndRenderData = function () {
         url: "/entries",
         dataType: "json",
         success: function( response ) {
-            //var sortedList = response.sort(function(a,b) {return a.})
             var sortedList = response.sort(function(a,b) {return b.rating.value - a.rating.value});
-            console.log(sortedList);
             var html = entriesTemplate(response);
             placeholder.html(html);
         }
