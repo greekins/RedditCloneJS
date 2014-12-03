@@ -34,7 +34,9 @@ var comments = [];
 
 //sample data
 entries.push(new Link(entries.length, "Das ist eine sehr gute Suchmaschine", "Author", "http://www.google.ch"));
+entries[entries.length-1].rating.value = 6;
 entries.push(new Link(entries.length, "Diese Website besuche ich mindestens einmal pro Tag!", "Dominic", "http://www.test.ch"));
+entries[entries.length-1].rating.value = 3;
 var comment = new Comment(0, "TestComment", "Author");
 var comment2 = new Comment(0, "Blabla", "Marco");
 comments.push(comment);
