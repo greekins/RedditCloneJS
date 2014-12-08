@@ -42,7 +42,7 @@ var comment2 = new Comment(0, "Blabla", "Marco");
 comments.push(comment);
 comments.push(comment2);
 entries[0].comments.push(comment);
-entries[1].comments.push(comment2);
+entries[0].comments.push(comment2);
 
 //default user
 users.push(new User(users.length, "a", "a") );

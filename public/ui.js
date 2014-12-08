@@ -1,6 +1,8 @@
-﻿$( document ).ready(function() {
-    updateHiddenElements();
+﻿var loggedIn = false;
+
+$( document ).ready(function() {
     getAndRenderData();
+    updateHiddenElements();
     username();
     $("#postEntry").click(function () {
         postLink();
@@ -18,10 +20,10 @@
         logout();
     });
 });
-var source = $('#entriesTemplate').html();
-var entriesTemplate = Handlebars.compile(source);
-var placeholder = $("#entries");
 var getAndRenderData = function () {
+    var source = $('#entriesTemplate').html();
+    var entriesTemplate = Handlebars.compile(source);
+    var placeholder = $("#entries");
     $.ajax({
         type: "GET",
         url: "/entries",
@@ -32,7 +34,7 @@ var getAndRenderData = function () {
             placeholder.html(html);
         }
     });
-}
+};
 
 var updateHiddenElements = function() {
     var placeholder = $("#usernameText");
@@ -41,22 +43,29 @@ var updateHiddenElements = function() {
         url: "/login",
         dataType: "json",
         success: function( response ) {
+            var els = document.getElementsByClassName("addCommentControl");
             if (response === "") {
                 document.getElementById("login-form").style.display="inline";
 
                 document.getElementById("usernameText").style.display="none";
                 document.getElementById("logout").style.display="none";
                 document.getElementById("addPost").style.display="none";
+                [].forEach.call(els, function(el) {
+                    el.style.display="none";
+                });
             } else {
                 document.getElementById("login-form").style.display="none";
 
                 document.getElementById("usernameText").style.display="inline";
                 document.getElementById("logout").style.display="inline";
                 document.getElementById("addPost").style.display="block";
+                [].forEach.call(els, function(el) {
+                    el.style.display="inline";
+                });
             }
         }
     });
-}
+};
 
 var postLink = function() {
     var title = $("#newPostTitle").val();
@@ -68,7 +77,17 @@ var postLink = function() {
             location.reload(true);
         }
     );
-}
+};
+var postComment = function(id) {
+    var text = $("#newCommentText" + id).val();
+    var json = { text: text };
+    $.post("/entry/" + id + "/comment",
+        json,
+        function() {
+            location.reload(true);
+        }
+    );
+};
 var login = function() {
     var username = $("#userName").val();
     var password = $("#userPassword").val();
@@ -79,7 +98,7 @@ var login = function() {
             location.reload(true);
         }
     );
-}
+};
 var username = function() {
     var source = $('#loginNameTemplate').html();
     var loginTemplate = Handlebars.compile(source);
@@ -93,10 +112,10 @@ var username = function() {
             placeholder.append(html);
         }
     });
-}
+};
 var register = function() {
     document.getElementById("registration").style.display="block";
-}
+};
 var addUser = function() {
     var username = $("#registerUsername").val();
     var password = $("#registerPassword").val();
@@ -125,25 +144,41 @@ var addUser = function() {
             }
         });
     }
-}
+};
 var logout = function() {
     $.post("/logout",
         function() {
             location.reload(true);
         }
     );
-}
+};
 var upvote = function(id) {
     $.post("/entry/" + id + "/up",
         function(data) {
             getAndRenderData();
         }
     );
-}
+};
 var downvote = function(id) {
     $.post("/entry/" + id + "/down",
         function(data) {
             getAndRenderData();
         }
     );
-}
+};
+var toggleComments = function(entryId) {
+    var comments = document.getElementById("comments" + entryId);
+    if (comments.style.display === "none") {
+        comments.style.display = "inline";
+    } else {
+        comments.style.display = "none";
+    }
+};
+var toggleAddComment = function(entryId) {
+    var comments = document.getElementById("addComment" + entryId);
+    if (comments.style.display === "none") {
+        comments.style.display = "inline";
+    } else {
+        comments.style.display = "none";
+    }
+};
