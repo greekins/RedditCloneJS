@@ -118,60 +118,76 @@
                 <script id='entriesTemplate' type='text/x-handlebars-template'>
                     {{#each .}}
 
-                        <li class="media list-group-item">
-                            <div class="pull-left col-xs-1">
-                                <a class="pull-left vote-button" onclick="upvote( {{id}} )">
-                                    <span class="glyphicon glyphicon-chevron-up"></span>
-                                </a>
-                                <div class="clearfix"></div>
-                                {{rating.value}}
-                                <div class="clearfix"></div>
-                                <a class="pull-left vote-button" onclick="downvote( {{id}} )">
-                                    <span class="glyphicon glyphicon-chevron-down"></span>
-                                </a>
-                            </div>
-                            <a href="{{url}}" target="_blank" style="text-decoration: none; font-size: 16pt;">{{title}}</a> <br>
-                            Submitted by {{author}}. <br>
-                            <a onclick="toggleComments({{id}})">Kommentare ({{comments.length}})</a>
-                            <div class="addCommentControl" style="display:none">
-                                 |
-                                <a onclick="toggleAddComment({{id}})">Kommentar hinzufügen</a>
-                            </div>
-                            <ul id="addComment{{id}}" class="media-list list-group" style="display:none">
-                                <li class="media list-group-item">
-                                    <form>
-                                        <textarea id="newCommentText{{id}}" class="form-control" rows="2" />
-                                        <button onclick="postComment({{id}})" type="button" class="btn btn-primary">Submit</button>
-                                    </form>
-                                </li>
-                            </ul>
-                            <ul id="comments{{id}}" class="media-list list-group" style="display:none">
-                                {{#each comments}}
-                                    <li class="media list-group-item">
-                                        <div class="pull-left col-xs-1">
-                                            <a commandLink class="pull-left vote-button">
-                                                <span class="glyphicon glyphicon-chevron-up"></span>
-                                            </a>
-                                            <div class="clearfix"></div>
-                                            {{rating.value}}
-                                            <div class="clearfix"></div>
-                                            <a class="pull-left vote-button">
-                                                <span class="glyphicon glyphicon-chevron-down"></span>
-                                            </a>
-                                        </div>
-                                        <div class="media-body">
-                                            <div>
-                                                <strong>{{author}}</strong>
-                                            </div>
-                                            <div>
-                                                <pre>{{text}}</pre>
-                                            </div>
-                                        </div>
-                                    </li>
-                                {{/each}}
-                            </ul>
-                        </li>
+                        <li class= "media list-group-item">
+                            <div class="row">
+                                <div class="col-md-1">
 
+                                    <div class="pull-left col-xs-1">
+                                        <a class="pull-left vote-button" onclick="upvote( {{id}} )">
+                                            <span class="glyphicon glyphicon-chevron-up"></span>
+                                        </a>
+                                        <div class="clearfix"></div>
+                                        {{rating.value}}
+                                        <div class="clearfix"></div>
+                                        <a class="pull-left vote-button" onclick="downvote( {{id}} )">
+                                            <span class="glyphicon glyphicon-chevron-down"></span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <a href="{{url}}" target="_blank" style="text-decoration: none; font-size: 16pt;">{{title}}</a> <br>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-offset-1">
+                                    <div class="col-md-6">
+                                        Submitted by {{author}}. <br>
+                                        <a onclick="toggleComments({{id}})">Kommentare ({{comments.length}})</a>
+                                        <div class="addCommentControl" style="display:none">
+                                             |
+                                            <a onclick="toggleAddComment({{id}})">Kommentar hinzufügen</a>
+                                        </div>
+                                        <ul id="addComment{{id}}" class="media-list list-group" style="display:none">
+                                            <li class="media list-group-item">
+                                                <form>
+                                                    <textarea id="newCommentText{{id}}" class="form-control" rows="2" />
+                                                    <button onclick="postComment({{id}})" type="button" class="btn btn-primary">Submit</button>
+                                                </form>
+                                            </li>
+                                        </ul>
+                                        <ul id="comments{{id}}" class="media-list list-group" style="display:none">
+                                            {{#each comments}}
+                                                <li class="media list-group-item">
+                                                    <div class="pull-left col-xs-1">
+                                                        <a commandLink class="pull-left vote-button">
+                                                            <span class="glyphicon glyphicon-chevron-up"></span>
+                                                        </a>
+                                                        <div class="clearfix"></div>
+                                                        {{rating.value}}
+                                                        <div class="clearfix"></div>
+                                                        <a class="pull-left vote-button">
+                                                            <span class="glyphicon glyphicon-chevron-down"></span>
+                                                        </a>
+                                                    </div>
+                                                    <div class="media-body">
+                                                        <div>
+                                                            <strong>{{author}}</strong>
+                                                        </div>
+                                                        <div>
+                                                            <pre>{{text}}</pre>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            {{/each}}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+                        </li>
                     {{/each}}
                 </script>
                 <script id="loginNameTemplate" type="'text/x-handlebars-template">
