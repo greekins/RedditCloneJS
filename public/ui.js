@@ -35,24 +35,21 @@ var getAndRenderData = function () {
 };
 
 var updateHiddenElements = function() {
-    var placeholder = $("#usernameText");
     $.ajax({
         type: "GET",
         url: "/login",
         dataType: "json",
         success: function( response ) {
-            var addCommentControls = document.getElementsByClassName("addCommentControl");
-            var voteButtons = document.getElementsByClassName("vote-button")
             if (response === "") {
                 document.getElementById("login-form").style.display="inline";
 
                 document.getElementById("usernameText").style.display="none";
                 document.getElementById("logout").style.display="none";
                 document.getElementById("addPost").style.display="none";
-                [].forEach.call(addCommentControls, function(el) {
+                [].forEach.call(document.getElementsByClassName("addCommentControl"), function(el) {
                     el.style.display="none";
                 });
-                [].forEach.call(voteButtons, function(el) {
+                [].forEach.call(document.getElementsByClassName("vote-button"), function(el) {
                     el.style.display="none";
                 });
             } else {
@@ -61,10 +58,10 @@ var updateHiddenElements = function() {
                 document.getElementById("usernameText").style.display="inline";
                 document.getElementById("logout").style.display="inline";
                 document.getElementById("addPost").style.display="block";
-                [].forEach.call(addCommentControls, function(el) {
+                [].forEach.call(document.getElementsByClassName("addCommentControl"), function(el) {
                     el.style.display="inline";
                 });
-                [].forEach.call(voteButtons, function(el) {
+                [].forEach.call(document.getElementsByClassName("vote-button"), function(el) {
                     el.style.display="block";
                 });
             }
@@ -129,7 +126,9 @@ var addUser = function() {
     var username = $("#registerUsername").val();
     var password = $("#registerPassword").val();
     var passwordConfirmation = $("#registerPasswordConfirmation").val();
-    if (password !== passwordConfirmation) {
+    if(username == "" || password == ""|| passwordConfirmation == "" ) {
+        alert("Please fill in all forms");
+    } else if (password !== passwordConfirmation) {
         alert("The entered passwords don't match.");
     } else {
         var json = { name: username, password: password};
@@ -170,6 +169,22 @@ var upvote = function(id) {
 };
 var downvote = function(id) {
     $.post("/entry/" + id + "/down",
+        function(data) {
+            getAndRenderData();
+            updateHiddenElements();
+        }
+    );
+};
+var upvoteComment = function(id) {
+    $.post("/comment/" + id + "/up",
+        function(data) {
+            getAndRenderData();
+            updateHiddenElements();
+        }
+    );
+};
+var downvoteComment = function(id) {
+    $.post("/comment/" + id + "/down",
         function(data) {
             getAndRenderData();
             updateHiddenElements();

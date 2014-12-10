@@ -123,14 +123,14 @@
                                 <div class="col-md-1">
 
                                     <div class="pull-left col-xs-1">
-                                        <a class="pull-left vote-button" onclick="upvote( {{id}} )">
+                                        <a class="pull-left vote-button" onclick="upvote( {{id}} )" style="display:none">
                                             <span class="glyphicon glyphicon-chevron-up"></span>
                                         </a>
                                         <div class="clearfix"></div>
                                         {{rating.value}}
                                         <div class="clearfix"></div>
-                                        <a class="pull-left vote-button" onclick="downvote( {{id}} )">
-                                            <span class="glyphicon glyphicon-chevron-down"></span>
+                                        <a class="pull-left vote-button" onclick="downvote( {{id}} )" style="display:none">
+                                        <span class="glyphicon glyphicon-chevron-down"></span>
                                         </a>
                                     </div>
                                 </div>
@@ -159,14 +159,14 @@
                                             {{#each comments}}
                                                 <li class="media list-group-item">
                                                     <div class="pull-left col-xs-1">
-                                                        <a commandLink class="pull-left vote-button">
-                                                            <span class="glyphicon glyphicon-chevron-up"></span>
+                                                        <a class="pull-left vote-button" onclick="upvoteComment({{id}})" style="display:none">
+                                                        <span class="glyphicon glyphicon-chevron-up"></span>
                                                         </a>
                                                         <div class="clearfix"></div>
                                                         {{rating.value}}
                                                         <div class="clearfix"></div>
-                                                        <a class="pull-left vote-button">
-                                                            <span class="glyphicon glyphicon-chevron-down"></span>
+                                                        <a class="pull-left vote-button" onclick="downvoteComment({{id}})" style="display:none">
+                                                        <span class="glyphicon glyphicon-chevron-down"></span>
                                                         </a>
                                                     </div>
                                                     <div class="media-body">
