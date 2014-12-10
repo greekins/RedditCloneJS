@@ -27,7 +27,8 @@ var getAndRenderData = function () {
         url: "/entries",
         dataType: "json",
         success: function( response ) {
-            var sortedList = response.sort(function(a,b) {return b.rating.value - a.rating.value});
+            console.log(response);
+            response.sort(function(a,b) {return b.rating.value - a.rating.value});
             var html = entriesTemplate(response);
             placeholder.html(html);
         }
@@ -101,7 +102,8 @@ var login = function() {
                 loginFailed = true;
                 alert("Login failed due to invalid credentials.");
             }
-            location.reload(true);
+            //location.reload(true);
+            updateHiddenElements();
         }
     );
 };
