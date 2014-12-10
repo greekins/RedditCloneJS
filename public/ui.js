@@ -41,14 +41,14 @@ var updateHiddenElements = function() {
         url: "/login",
         dataType: "json",
         success: function( response ) {
-            var els = document.getElementsByClassName("addCommentControl");
+            var addCommentControls = document.getElementsByClassName("addCommentControl");
             if (response === "") {
                 document.getElementById("login-form").style.display="inline";
 
                 document.getElementById("usernameText").style.display="none";
                 document.getElementById("logout").style.display="none";
                 document.getElementById("addPost").style.display="none";
-                [].forEach.call(els, function(el) {
+                [].forEach.call(addCommentControls, function(el) {
                     el.style.display="none";
                 });
             } else {
@@ -57,7 +57,7 @@ var updateHiddenElements = function() {
                 document.getElementById("usernameText").style.display="inline";
                 document.getElementById("logout").style.display="inline";
                 document.getElementById("addPost").style.display="block";
-                [].forEach.call(els, function(el) {
+                [].forEach.call(addCommentControls, function(el) {
                     el.style.display="inline";
                 });
             }
@@ -157,6 +157,7 @@ var upvote = function(id) {
     $.post("/entry/" + id + "/up",
         function(data) {
             getAndRenderData();
+            updateHiddenElements();
         }
     );
 };
@@ -164,6 +165,7 @@ var downvote = function(id) {
     $.post("/entry/" + id + "/down",
         function(data) {
             getAndRenderData();
+            updateHiddenElements();
         }
     );
 };
