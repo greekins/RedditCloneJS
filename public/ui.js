@@ -1,10 +1,7 @@
-﻿var loginFailed = false;
-
-$( document ).ready(function() {
+﻿$( document ).ready(function() {
     getAndRenderData();
     updateHiddenElements();
     username();
-    setLoginFailMessage("test");
     $("#postEntry").click(function () {
         postLink();
     });
@@ -44,10 +41,6 @@ var updateHiddenElements = function() {
         url: "/login",
         dataType: "json",
         success: function( response ) {
-            if (loginFailed === true) {
-                document.getElementById("loginFailMessage").style.display="inline";
-                loginFailed = false;
-            }
             var els = document.getElementsByClassName("addCommentControl");
             if (response === "") {
                 document.getElementById("login-form").style.display="inline";
@@ -107,13 +100,6 @@ var login = function() {
             location.reload(true);
         }
     );
-};
-var setLoginFailMessage = function(message) {
-    var source = $("#loginFailMessageTemplate").html();
-    var messageTemplate = Handlebars.compile(source);
-    var placeholder = $("loginFailMessage");
-    var html = messageTemplate(message);
-    placeholder.append(html);
 };
 var username = function() {
     var source = $('#loginNameTemplate').html();
