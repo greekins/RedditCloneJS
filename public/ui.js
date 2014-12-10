@@ -42,6 +42,7 @@ var updateHiddenElements = function() {
         dataType: "json",
         success: function( response ) {
             var addCommentControls = document.getElementsByClassName("addCommentControl");
+            var voteButtons = document.getElementsByClassName("vote-button")
             if (response === "") {
                 document.getElementById("login-form").style.display="inline";
 
@@ -49,6 +50,9 @@ var updateHiddenElements = function() {
                 document.getElementById("logout").style.display="none";
                 document.getElementById("addPost").style.display="none";
                 [].forEach.call(addCommentControls, function(el) {
+                    el.style.display="none";
+                });
+                [].forEach.call(voteButtons, function(el) {
                     el.style.display="none";
                 });
             } else {
@@ -59,6 +63,9 @@ var updateHiddenElements = function() {
                 document.getElementById("addPost").style.display="block";
                 [].forEach.call(addCommentControls, function(el) {
                     el.style.display="inline";
+                });
+                [].forEach.call(voteButtons, function(el) {
+                    el.style.display="block";
                 });
             }
         }
